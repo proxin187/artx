@@ -1,0 +1,6 @@
+*.o
+dwm
+dwm-msg
+dwm-statusbar
+config.h
+patches.h
