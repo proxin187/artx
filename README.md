@@ -13,7 +13,7 @@ This script is intended for use on a fresh Artix Linux installation.
 ### Install:
 
 ```bash
-$ curl -L https://raw.githubusercontent.com/proxin187/artx/main/install.sh | sh
+$ curl -L https://github.com/proxin187/artx/raw/refs/heads/main/install.sh | sh
 ```
 
 After installation completes, restart your system and run `startx` to launch dwm.
