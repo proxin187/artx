@@ -16,6 +16,8 @@ This script is intended for use on a fresh Artix Linux installation.
 $ curl -L https://raw.githubusercontent.com/proxin187/artx/main/install.sh | sh
 ```
 
+After installation completes, restart your system and run `startx` to launch dwm.
+
 ## Features
 
 ### dwm (flexipatch)
@@ -30,12 +32,15 @@ Patched with:
 - ROTATESTACK - Rotate the stack with keyboard shortcuts
 - SEAMLESS_RESTART - Persists windows and layout across window manager restarts
 
-Includes a multi-threaded C statusbar [dwm-statusbar.c](https://github.com/proxin187/artx/blob/main/dwm/dwm-statusbar.c) with volume controls via pamixer.
+Includes a multi-threaded C statusbar [dwm-statusbar.c](https://github.com/proxin187/artx/blob/main/dwm/dwm-statusbar.c) with volume controls via amixer.
 
 ### st (flexipatch)
 Patched with:
 - SCROLLBACK - Buffer scrolling support
 - SCROLLBACK_MOUSE_ALTSCREEN - Mouse scrolling
+
+### Audio
+Artx uses ALSA for minimal, low-latency audio with zero overhead. This comes at the expense of limited audio mixing capabilities - multiple audio sources playing simultaneously may not work as expected.
 
 ### Colorscheme
 Uses the [Moonfly](https://github.com/bluz71/vim-moonfly-colors) theme.

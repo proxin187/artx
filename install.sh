@@ -8,7 +8,7 @@ sudo pacman -S --noconfirm --needed git base-devel && git clone https://aur.arch
 
 echo "Info: Installing base dependencies"
 
-sudo pacman -S --noconfirm bash dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit libx11 libxft libxinerama libxrender libxcb
+sudo pacman -S --noconfirm bash dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit libx11 libxft libxinerama libxrender libxcb alsa-utils
 yay -S --noconfirm ttf-material-design-icons-desktop-git
 
 echo "Info: Cloning into Artx and building packages"
@@ -23,7 +23,7 @@ echo "Info: Setting up .xinitrc"
 cat > $HOME/.xinitrc << 'EOF'
 #!/bin/sh
 
-feh --bg-scale $HOME/.config/artx/wallpapers/wallpaper.jpg &
+feh --bg-scale $HOME/.config/artx/wallpapers/wallpaper-5.jpg &
 
 exec dwm
 EOF
@@ -32,6 +32,6 @@ chmod +x $HOME/.xinitrc
 # TODO: setup bash config
 
 echo "Info: The setup is done"
-echo "Note: Please restart your system before continuing"
+echo "Note: Please restart your system before running startx"
 
 
