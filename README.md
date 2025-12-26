@@ -4,7 +4,7 @@ Artx is a minimalist install script for setting up a patched dwm and st environm
 
 ## Installation
 
-This script is intended for use on a fresh Artix Linux installation.
+This script is intended for use on a fresh Artix Linux base install.
 
 ### Prerequisites:
 - A working internet connection.
@@ -20,7 +20,7 @@ After installation completes, restart your system and run `startx` to launch dwm
 
 ## Features
 
-### dwm (flexipatch)
+### dwm ([flexipatch](https://github.com/bakkeby/dwm-flexipatch))
 Patched with:
 - BAR_STATUSCMD - Execute shell commands on mouse events inside statusbar
 - BAR_STATUS2D - Allow colors in statusbar
@@ -34,7 +34,7 @@ Patched with:
 
 Includes a multi-threaded C statusbar [dwm-statusbar.c](https://github.com/proxin187/artx/blob/main/dwm/dwm-statusbar.c) with volume controls via amixer.
 
-### st (flexipatch)
+### st ([flexipatch](https://github.com/bakkeby/st-flexipatch))
 Patched with:
 - SCROLLBACK - Buffer scrolling support
 - SCROLLBACK_MOUSE_ALTSCREEN - Mouse scrolling
@@ -44,6 +44,31 @@ Artx uses ALSA for minimal, low-latency audio with zero overhead. This comes at 
 
 ### Colorscheme
 Uses the [Moonfly](https://github.com/bluz71/vim-moonfly-colors) theme.
+
+## Keybindings
+
+*Optimized for Colemak-DH layout.*
+
+| Keybinding | Action | Category |
+|------------|--------|----------|
+| `Super + d` | Launch dmenu | Launch |
+| `Super + q` | Kill focused window | Window |
+| `Super + Shift + q` | Quit DWM | System |
+| `Super + Shift + w` | Restart DWM (statusbar causes 5-10s delay) | System |
+| `Super + l` | Focus next window | Navigation |
+| `Super + h` | Focus previous window | Navigation |
+| `Super + Period` | Rotate stack up | Layout |
+| `Super + Comma` | Rotate stack down | Layout |
+| `Super + Shift + l` | Move window down | Window |
+| `Super + Shift + h` | Move window up | Window |
+| `Super + Shift + a` | Move to tag 1 | Tags |
+| `Super + Shift + r` | Move to tag 2 | Tags |
+| `Super + Shift + s` | Move to tag 3 | Tags |
+| `Super + Shift + t` | Move to tag 4 | Tags |
+| `Super + a` | View tag 1 | Tags |
+| `Super + r` | View tag 2 | Tags |
+| `Super + s` | View tag 3 | Tags |
+| `Super + t` | View tag 4 | Tags |
 
 ## Credits
 
