@@ -1,6 +1,6 @@
 # Artx
 
-Artx is a minimalist install script for setting up a patched dwm and st environment on Artix systems.
+Artx is an opinionated install script for setting up a minimal dwm environment on Artix systems.
 
 ## Installation
 
@@ -38,6 +38,9 @@ Includes a multi-threaded C statusbar [dwm-statusbar.c](https://github.com/proxi
 Patched with:
 - SCROLLBACK - Buffer scrolling support
 - SCROLLBACK_MOUSE_ALTSCREEN - Mouse scrolling
+
+### Doas
+Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), doas is a minimal alternative to sudo.
 
 ### Audio
 Artx uses ALSA for minimal, low-latency audio with zero overhead. This comes at the expense of limited audio mixing capabilities - multiple audio sources playing simultaneously may not work as expected.
