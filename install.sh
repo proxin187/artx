@@ -140,7 +140,10 @@ echo "Info: Starting Artx Setup"
 if ! groups | grep -q wheel; then
     echo "Info: Adding user to wheel group"
     sudo usermod -aG wheel $USER
-    exec su - $(whoami) -c "$(declare -f main_install); main_install"
+    exec newgrp wheel <<EOF
+$(declare -f main_install)
+main_install
+EOF
 else
     main_install
 fi
