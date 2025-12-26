@@ -2,6 +2,11 @@
 
 echo "Info: Starting Artx Setup"
 
+if ! groups | grep -q wheel; then
+    echo "Info: Adding user to wheel group"
+    sudo usermod -aG wheel $USER
+fi
+
 echo "Info: Installing doas"
 sudo pacman -S --noconfirm opendoas
 
