@@ -3,16 +3,16 @@
 echo "Info: Starting Artx Setup"
 
 echo "Info: Installing yay AUR helper"
-
 sudo pacman -S --noconfirm --needed git base-devel && git clone https://aur.archlinux.org/yay.git /tmp/yay && (cd /tmp/yay && makepkg -si --noconfirm)
 
 echo "Info: Installing base dependencies"
-
 sudo pacman -S --noconfirm wireless_tools bash dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb alsa-utils alsa-utils-runit
 yay -S --noconfirm ttf-material-design-icons-desktop-git
 
-echo "Info: Cloning into Artx and building packages"
+echo "Info: Enabling alsa runit service"
+sudo ln -s /etc/runit/sv/alsa /run/runit/service/
 
+echo "Info: Cloning into Artx and building packages"
 git clone https://github.com/proxin187/artx $HOME/.config/artx
 cd $HOME/.config/artx
 
