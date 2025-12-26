@@ -180,33 +180,32 @@ void* mem_thread(void* arg) {
 
 void get_volume(char *vol_str, size_t len) {
     FILE *fp;
-    int volume;
-    char muted[8];
+    int volume = 0;
+    char line[128];
+    int is_muted = 0;
 
-    fp = popen("pamixer --get-volume", "r");
+    fp = popen("amixer sget Master", "r");
 
-    if (fp && fscanf(fp, "%d", &volume) == 1) {
+    if (fp) {
+        while (fgets(line, sizeof(line), fp)) {
+            char *vol_start = strchr(line, '[');
+
+            if (strstr(line, "Playback") && vol_start) {
+                sscanf(vol_start, "[%d%%]", &volume);
+
+                char *mute_check = strstr(line, "[off]");
+                is_muted = (mute_check != NULL);
+
+                break;
+            }
+        }
+
         pclose(fp);
-    } else {
-        if (fp) pclose(fp);
-
-        volume = 0;
     }
 
-    fp = popen("pamixer --get-mute", "r");
-
-    if (fp && fgets(muted, sizeof(muted), fp)) {
-        muted[strcspn(muted, "\n")] = 0;
-        pclose(fp);
-
-        if (strcmp(muted, "true") == 0) {
-            snprintf(vol_str, len, "\x01" FG(RED) " 󰖁 MUTED\x01");
-        } else {
-            snprintf(vol_str, len, "\x01" FG(BLUE) " 󰕾 %d%%\x01", volume);
-        }
+    if (is_muted) {
+        snprintf(vol_str, len, "\x01" FG(RED) " 󰖁 MUTED\x01");
     } else {
-        if (fp) pclose(fp);
-
         snprintf(vol_str, len, "\x01" FG(BLUE) " 󰕾 %d%%\x01", volume);
     }
 }
