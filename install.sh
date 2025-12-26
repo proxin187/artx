@@ -63,8 +63,8 @@ prepend_keymap = [
     { on = "q", run = "quit", desc = "Quit" },
     { on = "n", run = "arrow 1", desc = "Move cursor down" },
     { on = "e", run = "arrow -1", desc = "Move cursor up" },
-    { on = "l", run = "leave", desc = "Go to parent directory" },
-    { on = "h", run = "enter", desc = "Enter directory" },
+    { on = "h", run = "leave", desc = "Go to parent directory" },
+    { on = "l", run = "enter", desc = "Enter directory" },
     { on = "a", run = "create", desc = "Create a file or directory"},
     { on = "r", run = "rename", desc = "Rename a file or directory"},
     { on = "d", run = "remove --permanently", desc = "Delete a file or directory"},
@@ -122,11 +122,6 @@ noremap e k
 
 noremap t e
 noremap s b
-
-noremap g h
-noremap m l
-
-map N :
 EOF
 
 cat > $HOME/.config/nvim/coc-settings.json << 'EOF'

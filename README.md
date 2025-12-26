@@ -38,9 +38,16 @@ Includes a multi-threaded C statusbar [dwm-statusbar.c](https://github.com/proxi
 Patched with:
 - SCROLLBACK - Buffer scrolling support
 - SCROLLBACK_MOUSE_ALTSCREEN - Mouse scrolling
+- SIXEL - Sixel graphics
 
 ### Doas
-Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), doas is a minimal alternative to sudo.
+Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), a small alternative to sudo.
+
+### Yazi
+Artx will install [yazi](https://github.com/sxyazi/yazi), a terminal file manager with support for image previews though sixel graphics, code highlighting in previews, and much more.
+
+### Neovim
+Artx will install [neovim](https://github.com/neovim/neovim), a modern vim fork. Artx will install a vimscript based config, vimscript is outdated, but why use lua when vimscript works perfectly fine.
 
 ### Audio
 Artx uses ALSA for minimal, low-latency audio with zero overhead. This comes at the expense of limited audio mixing capabilities - multiple audio sources playing simultaneously may not work as expected.
@@ -50,7 +57,9 @@ Uses the [Moonfly](https://github.com/bluz71/vim-moonfly-colors) theme.
 
 ## Keybindings
 
-*Optimized for Colemak-DH layout.*
+*These keybindings are optimized for colemak-dh.*
+
+### dwm keybindings
 
 | Keybinding | Action | Category |
 |------------|--------|----------|
@@ -73,8 +82,32 @@ Uses the [Moonfly](https://github.com/bluz71/vim-moonfly-colors) theme.
 | `Super + s` | View tag 3 | Tags |
 | `Super + t` | View tag 4 | Tags |
 
-## Credits
+### yazi keybindings
 
+| Keybinding | Action | Category |
+|------------|--------|----------|
+| `q` | Quit | File manager |
+| `n` | Move cursor down | File manager |
+| `e` | Move cursor up | File manager |
+| `h` | Go to parent directory | File manager |
+| `l` | Enter directory | File manager |
+| `a` | Create a file or directory | File manager |
+| `r` | Rename a file or directory | File manager |
+| `d` | Delete a file or directory | File manager |
+
+### neovim keybindings
+
+*These are only the keybindings that are unique for artx, everything else is the same as normal*
+
+| Keybinding | Action | Category |
+|------------|--------|----------|
+| `n` | Move cursor down | Movement |
+| `e` | Move cursor up | Movement |
+| `t` | Move one word to the right | Movement |
+| `s` | Move one word to the left | Movement |
+| `j` | Change window | Window |
+
+## Credits
 The statusbar design is based on [bedwm](https://github.com/namishh/dwm). Rewrote it in C and added volume controls.
 
 ## License
