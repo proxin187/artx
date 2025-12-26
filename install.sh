@@ -5,7 +5,7 @@ echo "Info: Starting Artx Setup"
 echo "Info: Installing doas"
 sudo pacman -S --noconfirm opendoas
 
-sudo cat > /etc/doas.conf << 'EOF'
+cat << 'EOF' | sudo tee /etc/doas.conf
 permit persist setenv {PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin} :wheel
 
 permit nopass :wheel as root cmd poweroff
@@ -14,7 +14,7 @@ EOF
 sudo chown -c root:root /etc/doas.conf
 sudo chmod -c 0400 /etc/doas.conf
 
-sudo cat > /usr/local/bin/sudo << 'EOF'
+cat << 'EOF' | sudo tee /usr/local/bin/sudo
 #!/bin/bash
 doas "$@"
 EOF
