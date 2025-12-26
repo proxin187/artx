@@ -22,7 +22,7 @@ static char battery_str[MAX_LEN] = BG(BLACK) FG(GREEN) " 󰁹 --%";
 static char cpu_str[MAX_LEN] = BG(GREEN) FG(BLACK) "  󰻠   " BG(GREY) FG(GREEN) "  ---%  " BG(BLACK);
 static char mem_str[MAX_LEN] = BG(GREY) FG(RED) "  󰘚  " BG(BLACK) FG(RED) "  --- ";
 static char wlan_str[MAX_LEN] = BG(BLUE) FG(BLACK) "  󰤯  " BG(BLACK) FG(BLUE) "  Disconnected ";
-static char clock_str[MAX_LEN] = BG(BLUE) FG(BLACK) "  󰃭  ---  " BG(BLACK) " ";
+static char clock_str[MAX_LEN] = BG(BLUE) FG(BLACK) "  󰥔  ---  " BG(BLACK) " ";
 
 static pthread_mutex_t cpu_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t battery_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -141,7 +141,7 @@ void* clock_thread(void* arg) {
         strftime(buffer, sizeof(buffer), "%H:%M", tm_info);
 
         pthread_mutex_lock(&clock_mutex);
-        snprintf(clock_str, MAX_LEN, BG(BLUE) FG(BLACK) "  󰃭  %s  " BG(BLACK) " ", buffer);
+        snprintf(clock_str, MAX_LEN, BG(BLUE) FG(BLACK) "  󰥔  %s  " BG(BLACK) " ", buffer);
         pthread_mutex_unlock(&clock_mutex);
 
         sleep(10);
