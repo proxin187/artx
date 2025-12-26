@@ -47,7 +47,7 @@ Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), a small
 Artx will install [yazi](https://github.com/sxyazi/yazi), a terminal file manager with support for image previews though sixel graphics, code highlighting in previews, and much more.
 
 ### Neovim
-Artx will install [neovim](https://github.com/neovim/neovim), a modern vim fork. Artx will install a vimscript based config, vimscript is outdated, but why use lua when vimscript works perfectly fine.
+Artx will install [neovim](https://github.com/neovim/neovim), a modern vim fork. Artx has a vimscript based config, vimscript is outdated, but why use lua when vimscript works perfectly fine.
 
 ### Audio
 Artx uses ALSA for minimal, low-latency audio with zero overhead. This comes at the expense of limited audio mixing capabilities - multiple audio sources playing simultaneously may not work as expected.
