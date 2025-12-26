@@ -8,7 +8,7 @@ sudo pacman -S --noconfirm --needed git base-devel && git clone https://aur.arch
 
 echo "Info: Installing base dependencies"
 
-sudo pacman -S --noconfirm wireless_tools bash dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb alsa-utils
+sudo pacman -S --noconfirm wireless_tools bash dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb alsa-utils alsa-utils-runit
 yay -S --noconfirm ttf-material-design-icons-desktop-git
 
 echo "Info: Cloning into Artx and building packages"

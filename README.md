@@ -4,11 +4,11 @@ Artx is a minimalist install script for setting up a patched dwm and st environm
 
 ## Installation
 
-This script is intended for use on a fresh Artix Linux base install.
+This script is intended for use on a fresh Artix Linux runit base install.
 
 ### Prerequisites:
 - A working internet connection.
-- Base system installed and booted.
+- Base system installed and booted with runit.
 
 ### Install:
 
