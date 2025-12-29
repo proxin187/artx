@@ -22,13 +22,6 @@ EOF
     doas pacman -Rdd --noconfirm sudo
 }
 
-# partially stolen from: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=ttf-material-design-icons-desktop-git
-install_material_design_icons() {
-    git clone https://github.com/Templarian/MaterialDesign-Font.git /tmp/MaterialDesign-Font
-
-    install -D -m644 /tmp/MaterialDesign-Font/MaterialDesignIconsDesktop.ttf /usr/share/fonts/TTF/MaterialDesignIconsDesktop.ttf
-}
-
 install_alsa() {
     doas pacman -S --noconfirm alsa-utils alsa-utils-runit
 
@@ -285,7 +278,9 @@ echo "Info: Installing base dependencies"
 doas pacman -S --noconfirm wireless_tools git bash neovim yazi dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb xclip
 
 echo "Info: Installing Material Design Icons"
-install_material_design_icons
+git clone https://github.com/Templarian/MaterialDesign-Font.git /tmp/MaterialDesign-Font
+
+install -D -m644 /tmp/MaterialDesign-Font/MaterialDesignIconsDesktop.ttf /usr/share/fonts/TTF/MaterialDesignIconsDesktop.ttf
 
 echo "Info: Installing ALSA"
 install_alsa
