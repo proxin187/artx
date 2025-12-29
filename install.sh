@@ -287,7 +287,7 @@ echo "Info: Installing Material Design Icons"
 install_material_design_icons
 
 echo "Info: Installing base dependencies"
-doas pacman -S --noconfirm wireless_tools bash neovim yazi dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb xclip
+doas pacman -S --noconfirm wireless_tools git bash neovim yazi dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb xclip
 
 echo "Info: Installing ALSA"
 install_alsa
