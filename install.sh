@@ -1,8 +1,7 @@
 #!/bin/bash
 
 
-main_install() {
-    echo "Info: Installing doas"
+install_doas() {
     sudo pacman -S --noconfirm opendoas
 
     cat << 'EOF' | sudo tee /etc/doas.conf
@@ -16,30 +15,163 @@ EOF
 
     cat << 'EOF' | sudo tee /usr/local/bin/sudo
 #!/bin/bash
-doas "$@"
+doas ${@//-k}
 EOF
     sudo chmod +x /usr/local/bin/sudo
 
-    doas pacman -R --noconfirm sudo
+    doas pacman -Rdd --noconfirm sudo
+}
 
-    echo "Info: Installing yay AUR helper"
-    doas pacman -S --noconfirm --needed git base-devel && git clone https://aur.archlinux.org/yay.git /tmp/yay && (cd /tmp/yay && makepkg -si --noconfirm)
+# partially stolen from: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=ttf-material-design-icons-desktop-git
+install_material_design_icons() {
+    git clone https://github.com/Templarian/MaterialDesign-Font.git /tmp/MaterialDesign-Font
 
-    echo "Info: Installing base dependencies"
-    doas pacman -S --noconfirm wireless_tools bash neovim yazi dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb alsa-utils alsa-utils-runit
-    yay -S --noconfirm ttf-material-design-icons-desktop-git
+    install -D -m644 /tmp/MaterialDesign-Font/MaterialDesignIconsDesktop.ttf /usr/share/fonts/TTF/MaterialDesignIconsDesktop.ttf
+}
 
-    echo "Info: Enabling alsa runit service"
+install_alsa() {
+    doas pacman -S alsa-utils alsa-utils-runit
+
     doas ln -s /etc/runit/sv/alsa /run/runit/service/
 
-    echo "Info: Cloning into Artx and building packages"
+    read -rp "Do you want to disable alsa powersave to prevent popping/crackling in audio? (yes/no): " disable_powersave
+
+    if [[ "$disable_powersave" = "yes" || "$disable_powersave" = "y" ]]; then
+        echo "Info: Disabling powersave"
+
+        cat << 'EOF' | doas tee /etc/modprobe.d/alsa-disable-powersave.conf
+options snd_hda_intel power_save=0 power_save_controller=N
+EOF
+    fi
+
+    aplay -l
+
+    while true
+    do
+        read -rp "Enter the default card and device (format: card:device): " _cd
+
+        if [[ ! "$_cd" =~ ^[0-9]+:[0-9]+$ ]]; then
+            echo "Error: Invalid format: Use card:device (e.g. 1:0)"
+            continue
+        fi
+
+        card=$(echo $_cd | awk -F ':' '{print $1}')
+        device=$(echo $_cd | awk -F ':' '{print $2}')
+
+        if aplay -l | awk -v c="$card" -v d="$device" '
+            /^card [0-9]+:/ {
+                match($0, /card ([0-9]+):/, card_match)
+                match($0, /device ([0-9]+):/, dev_match)
+                if (card_match[1] == c && dev_match[1] == d) {
+                    found=1
+                    exit
+                }
+            }
+            END { exit !found }
+        '; then
+            echo "Info: Valid selection: card=$card device=$device"
+            break
+        else
+            echo "Error: Card $card with device $device does not exist."
+        fi
+    done
+
+
+    doas tee /etc/asound.conf > /dev/null <<EOF
+pcm.!default {
+    type hw
+    card $card
+    device $device
+}
+
+ctl.!default {
+    type hw
+    card $card
+}
+EOF
+
+    read -rp "Do you want to disable alsa restore on boot? (yes/no): " disable_restore
+
+    if [[ "$disable_restore" = "yes" || "$disable_restore" = "y" ]]; then
+        echo "Info: Disabling restore/store"
+
+        doas rm -f /etc/runit/sv/alsa/finish
+
+        cat << 'EOF' | doas tee /etc/runit/sv/alsa/run
+#!/bin/sh
+set -e
+EOF
+
+        mapfile -t controls < <(
+            amixer scontents |
+            awk -F"'" '
+                /Simple mixer control/ {
+                    if (name && has_playback && not_mic)
+                        print name
+                    name = $2
+                    has_playback = 0
+                    not_mic = 1
+                }
+                /Playback/ {
+                    has_playback = 1
+                }
+                /Mic/ {
+                    not_mic = 0
+                }
+            '
+        )
+
+        declare -A mixer_settings
+
+        for (( i=${#controls[@]}-1; i>=0; i-- )); do
+            control="${controls[i]}"
+
+            while true; do
+                read -rp "Set '${control}' volume (0–100 | m/M): " input
+
+                case "$input" in
+                    m|M)
+                        mixer_settings["$control"]="0% mute"
+                        break
+                        ;;
+                    [0-9]|[0-9][0-9]|100)
+                        mixer_settings["$control"]="$input% unmute"
+                        break
+                        ;;
+                    *)
+                        echo "Error: Invalid mixer settings"
+                        ;;
+                esac
+            done
+        done
+
+        for (( i=${#controls[@]}-1; i>=0; i-- )); do
+            control="${controls[i]}"
+            setting="${mixer_settings[$control]}"
+
+
+            doas tee -a /etc/runit/sv/alsa/run > /dev/null <<EOF
+amixer sset $control $setting >/dev/null
+EOF
+        done
+
+        cat << 'EOF' | doas tee -a /etc/runit/sv/alsa/run
+exec chpst -b alsa pause
+EOF
+
+        doas chmod +x /etc/runit/sv/alsa/run
+    fi
+}
+
+install_artx() {
     git clone https://github.com/proxin187/artx $HOME/.config/artx
     cd $HOME/.config/artx
 
     (cd dwm && doas make clean install)
     (cd st && doas make clean install)
+}
 
-    echo "Info: Setting up dotfiles"
+setup_dotfiles() {
     cat > $HOME/.xinitrc << 'EOF'
 #!/bin/bash
 feh --bg-scale $HOME/.config/artx/wallpapers/wallpaper-5.jpg &
@@ -130,22 +262,39 @@ EOF
   "typescript.autoClosingTags": false
 }
 EOF
-
-    echo "Info: The setup is done"
-    echo "Note: Please restart your system before running startx"
 }
 
 echo "Info: Starting Artx Setup"
 
 if ! groups | grep -q wheel; then
-    echo "Info: Adding user to wheel group"
-    sudo usermod -aG wheel $USER
-    exec newgrp wheel <<EOF
-$(declare -f main_install)
-main_install
-EOF
-else
-    main_install
+    echo "Error: User must be part of the wheel group"
+    exit 2
 fi
+
+if [ -d "/etc/runit" ]; then
+    echo "Error: Artx can only run on runit based systems"
+    exit 2
+fi
+
+echo "Info: Installing doas"
+install_doas
+
+echo "Info: Installing Material Design Icons"
+install_material_design_icons
+
+echo "Info: Installing base dependencies"
+doas pacman -S --noconfirm wireless_tools bash neovim yazi dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb
+
+echo "Info: Installing ALSA"
+install_alsa
+
+echo "Info: Cloning into Artx and building packages"
+install_artx
+
+echo "Info: Setting up dotfiles"
+setup_dotfiles
+
+echo "Info: The setup is done"
+echo "Note: Please restart your system before running startx"
 
 
