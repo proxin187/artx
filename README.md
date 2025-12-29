@@ -41,7 +41,7 @@ Patched with:
 - SIXEL - Sixel graphics
 
 ### Doas
-Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), a small alternative to sudo. doas acts as a drop-in replacement through /usr/local/bin/sudo, a bash script that executes doas and filters any arguments that are uncompatible with doas.
+Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), a small alternative to sudo. doas acts as a drop-in replacement through /usr/local/bin/sudo, a bash script that executes doas and filters any arguments that are incompatible with doas.
 
 ### Yazi
 Artx will install [yazi](https://github.com/sxyazi/yazi), a terminal file manager with support for image previews though sixel graphics, code highlighting in previews, and much more.
