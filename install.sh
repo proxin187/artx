@@ -280,7 +280,7 @@ doas pacman -S --noconfirm wireless_tools git bash neovim yazi dmenu ttf-iosevka
 echo "Info: Installing Material Design Icons"
 git clone https://github.com/Templarian/MaterialDesign-Font.git /tmp/MaterialDesign-Font
 
-install -D -m644 /tmp/MaterialDesign-Font/MaterialDesignIconsDesktop.ttf /usr/share/fonts/TTF/MaterialDesignIconsDesktop.ttf
+doas install -D -m644 /tmp/MaterialDesign-Font/MaterialDesignIconsDesktop.ttf /usr/share/fonts/TTF/MaterialDesignIconsDesktop.ttf
 
 echo "Info: Installing ALSA"
 install_alsa
