@@ -18,6 +18,9 @@ $ curl -L https://github.com/proxin187/artx/raw/refs/heads/main/install.sh | sh
 
 After installation completes, restart your system and run `startx` to launch dwm.
 
+> [!IMPORTANT]
+> You might have to run "nvm install node" if node isnt installed properly.
+
 ## Features
 
 ### dwm ([flexipatch](https://github.com/bakkeby/dwm-flexipatch))
