@@ -172,7 +172,7 @@ static const char font[]                 = "Iosevka Nerd Font Mono 10";
 static const char *fonts[] = {
     "Iosevka Nerd Font Mono:size=10:style=Regular",
     "Noto Color Emoji:size=12:antialias=true:autohint=true",
-    "Material Design Icons Desktop:size=11"
+    "Material Design Icons Desktop:size=11:antialias=true:autohint=true"
 };
 #endif // BAR_PANGO_PATCH
 static const char dmenufont[]            = "Iosevka Nerd Font Mono:size=10:style=Regular";
