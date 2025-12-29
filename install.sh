@@ -266,6 +266,13 @@ EOF
   "typescript.autoClosingTags": false
 }
 EOF
+
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+    nvm install node
+    nvm use node
+
+    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 }
 
 echo "Info: Starting Artx Setup"
