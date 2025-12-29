@@ -30,9 +30,9 @@ install_material_design_icons() {
 }
 
 install_alsa() {
-    doas pacman -S alsa-utils alsa-utils-runit
+    doas pacman -S --noconfirm alsa-utils alsa-utils-runit
 
-    doas ln -s /etc/runit/sv/alsa /run/runit/service/
+    doas ln -sf /etc/runit/sv/alsa /run/runit/service/
 
     read -r -p "Do you want to disable alsa powersave to prevent popping/crackling in audio? (yes/no): " disable_powersave </dev/tty
 
@@ -129,7 +129,8 @@ EOF
 
             while true
             do
-                read -r -p "Set '${control}' volume (0–100 | m/M): " input </dev/tty
+                echo "Simple Mixer Control: ${control}"
+                read -r -p "Set the volume (0–100 | m/M): " input </dev/tty
 
                 case "$input" in
                     m|M)
@@ -286,7 +287,7 @@ echo "Info: Installing Material Design Icons"
 install_material_design_icons
 
 echo "Info: Installing base dependencies"
-doas pacman -S --noconfirm wireless_tools bash neovim yazi dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb
+doas pacman -S --noconfirm wireless_tools bash neovim yazi dmenu ttf-iosevka-nerd noto-fonts-emoji feh xorg-server xorg-xinit xorg-xsetroot libx11 libxft libxinerama libxrender libxcb xclip
 
 echo "Info: Installing ALSA"
 install_alsa
