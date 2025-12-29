@@ -34,7 +34,7 @@ install_alsa() {
 
     doas ln -s /etc/runit/sv/alsa /run/runit/service/
 
-    read -rp "Do you want to disable alsa powersave to prevent popping/crackling in audio? (yes/no): " disable_powersave
+    read -r -p "Do you want to disable alsa powersave to prevent popping/crackling in audio? (yes/no): " disable_powersave </dev/tty
 
     if [[ "$disable_powersave" = "yes" || "$disable_powersave" = "y" ]]; then
         echo "Info: Disabling powersave"
@@ -48,7 +48,7 @@ EOF
 
     while true
     do
-        read -rp "Enter the default card and device (format: card:device): " _cd
+        read -r -p "Enter the default card and device (format: card:device): " _cd </dev/tty
 
         if [[ ! "$_cd" =~ ^[0-9]+:[0-9]+$ ]]; then
             echo "Error: Invalid format: Use card:device (e.g. 1:0)"
@@ -90,7 +90,7 @@ ctl.!default {
 }
 EOF
 
-    read -rp "Do you want to disable alsa restore on boot? (yes/no): " disable_restore
+    read -r -p "Do you want to disable alsa restore on boot? (yes/no): " disable_restore </dev/tty
 
     if [[ "$disable_restore" = "yes" || "$disable_restore" = "y" ]]; then
         echo "Info: Disabling restore/store"
@@ -123,11 +123,13 @@ EOF
 
         declare -A mixer_settings
 
-        for (( i=${#controls[@]}-1; i>=0; i-- )); do
+        for (( i=${#controls[@]}-1; i>=0; i-- ))
+        do
             control="${controls[i]}"
 
-            while true; do
-                read -rp "Set '${control}' volume (0–100 | m/M): " input
+            while true
+            do
+                read -r -p "Set '${control}' volume (0–100 | m/M): " input </dev/tty
 
                 case "$input" in
                     m|M)
@@ -145,7 +147,8 @@ EOF
             done
         done
 
-        for (( i=${#controls[@]}-1; i>=0; i-- )); do
+        for (( i=${#controls[@]}-1; i>=0; i-- ))
+        do
             control="${controls[i]}"
             setting="${mixer_settings[$control]}"
 
