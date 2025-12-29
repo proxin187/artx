@@ -271,7 +271,7 @@ if ! groups | grep -q wheel; then
     exit 2
 fi
 
-if [ -d "/etc/runit" ]; then
+if ! [ -d "/etc/runit" ]; then
     echo "Error: Artx can only run on runit based systems"
     exit 2
 fi
