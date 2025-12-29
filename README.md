@@ -8,7 +8,7 @@ This script is intended for use on a fresh Artix Linux runit base install.
 
 ### Prerequisites:
 - A working internet connection.
-- Base system installed and booted with runit.
+- Base system installed with runit.
 
 ### Install:
 
@@ -41,7 +41,7 @@ Patched with:
 - SIXEL - Sixel graphics
 
 ### Doas
-Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), a small alternative to sudo.
+Artx replaces sudo with [opendoas](https://github.com/Duncaen/OpenDoas), a small alternative to sudo. doas acts as a drop-in replacement through /usr/local/bin/sudo, a bash script that executes doas and filters any arguments that are uncompatible with doas.
 
 ### Yazi
 Artx will install [yazi](https://github.com/sxyazi/yazi), a terminal file manager with support for image previews though sixel graphics, code highlighting in previews, and much more.
@@ -50,7 +50,7 @@ Artx will install [yazi](https://github.com/sxyazi/yazi), a terminal file manage
 Artx will install [neovim](https://github.com/neovim/neovim), a modern vim fork. Artx has a vimscript based config, vimscript is outdated, but why use lua when vimscript works perfectly fine.
 
 ### Audio
-Artx uses ALSA for minimal, low-latency audio with zero overhead. This comes at the expense of limited audio mixing capabilities - multiple audio sources playing simultaneously may not work as expected.
+Artx uses ALSA for minimal, low-latency audio with zero overhead. This comes at the expense of limited audio mixing capabilities - multiple audio sources playing simultaneously may not work as expected. You will get the option to disable alsa powersaving, the option to disable alsa restore on boot and the ability to select the default volume configuration that gets set on boot if you disable alsa restore.
 
 ### Colorscheme
 Uses the [Moonfly](https://github.com/bluz71/vim-moonfly-colors) theme.
