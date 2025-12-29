@@ -34,15 +34,11 @@ install_alsa() {
 
     doas ln -sf /etc/runit/sv/alsa /run/runit/service/
 
-    read -r -p "Do you want to disable alsa powersave to prevent popping/crackling in audio? (yes/no): " disable_powersave </dev/tty
+    echo "Info: Disabling powersave"
 
-    if [[ "$disable_powersave" = "yes" || "$disable_powersave" = "y" ]]; then
-        echo "Info: Disabling powersave"
-
-        cat << 'EOF' | doas tee /etc/modprobe.d/alsa-disable-powersave.conf
+    cat << 'EOF' | doas tee /etc/modprobe.d/alsa-disable-powersave.conf
 options snd_hda_intel power_save=0 power_save_controller=N
 EOF
-    fi
 
     aplay -l
 
@@ -90,81 +86,77 @@ ctl.!default {
 }
 EOF
 
-    read -r -p "Do you want to disable alsa restore on boot? (yes/no): " disable_restore </dev/tty
+    echo "Info: Disabling restore/store"
 
-    if [[ "$disable_restore" = "yes" || "$disable_restore" = "y" ]]; then
-        echo "Info: Disabling restore/store"
+    doas rm -f /etc/runit/sv/alsa/finish
 
-        doas rm -f /etc/runit/sv/alsa/finish
-
-        cat << 'EOF' | doas tee /etc/runit/sv/alsa/run
+    cat << 'EOF' | doas tee /etc/runit/sv/alsa/run
 #!/bin/sh
 set -e
 EOF
 
-        mapfile -t controls < <(
-            amixer scontents |
-            awk -F"'" '
-                /Simple mixer control/ {
-                    if (name && has_playback && not_mic)
-                        print name
-                    name = $2
-                    has_playback = 0
-                    not_mic = 1
-                }
-                /Playback/ {
-                    has_playback = 1
-                }
-                /Mic/ {
-                    not_mic = 0
-                }
-            '
-        )
+    mapfile -t controls < <(
+        amixer scontents |
+        awk -F"'" '
+            /Simple mixer control/ {
+                if (name && has_playback && not_mic)
+                    print name
+                name = $2
+                has_playback = 0
+                not_mic = 1
+            }
+            /Playback/ {
+                has_playback = 1
+            }
+            /Mic/ {
+                not_mic = 0
+            }
+        '
+    )
 
-        declare -A mixer_settings
+    declare -A mixer_settings
 
-        for (( i=${#controls[@]}-1; i>=0; i-- ))
+    for (( i=${#controls[@]}-1; i>=0; i-- ))
+    do
+        control="${controls[i]}"
+
+        while true
         do
-            control="${controls[i]}"
+            echo "Simple Mixer Control: ${control}"
+            read -r -p "Set the volume (0–100 | m/M): " input </dev/tty
 
-            while true
-            do
-                echo "Simple Mixer Control: ${control}"
-                read -r -p "Set the volume (0–100 | m/M): " input </dev/tty
-
-                case "$input" in
-                    m|M)
-                        mixer_settings["$control"]="0% mute"
-                        break
-                        ;;
-                    [0-9]|[0-9][0-9]|100)
-                        mixer_settings["$control"]="$input% unmute"
-                        break
-                        ;;
-                    *)
-                        echo "Error: Invalid mixer settings"
-                        ;;
-                esac
-            done
+            case "$input" in
+                m|M)
+                    mixer_settings["$control"]="0% mute"
+                    break
+                    ;;
+                [0-9]|[0-9][0-9]|100)
+                    mixer_settings["$control"]="$input% unmute"
+                    break
+                    ;;
+                *)
+                    echo "Error: Invalid mixer settings"
+                    ;;
+            esac
         done
+    done
 
-        for (( i=${#controls[@]}-1; i>=0; i-- ))
-        do
-            control="${controls[i]}"
-            setting="${mixer_settings[$control]}"
+    for (( i=${#controls[@]}-1; i>=0; i-- ))
+    do
+        control="${controls[i]}"
+        setting="${mixer_settings[$control]}"
 
 
-            doas tee -a /etc/runit/sv/alsa/run > /dev/null <<EOF
+        doas tee -a /etc/runit/sv/alsa/run > /dev/null <<EOF
 amixer sset $control $setting >/dev/null
 EOF
-        done
+    done
 
-        cat << 'EOF' | doas tee -a /etc/runit/sv/alsa/run
+    cat << 'EOF' | doas tee -a /etc/runit/sv/alsa/run
 exec chpst -b alsa pause
 EOF
 
-        doas chmod +x /etc/runit/sv/alsa/run
-    fi
+    doas chmod +x /etc/runit/sv/alsa/run
 }
 
 install_artx() {
@@ -268,8 +260,7 @@ EOF
 EOF
 
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-    nvm install node
-    nvm use node
+    sh -c 'nvm install node && nvm use node'
 
     sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
