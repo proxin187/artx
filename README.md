@@ -2,6 +2,9 @@
 
 Artx is an opinionated install script for setting up a minimal dwm environment on Artix systems.
 
+## Screenshot
+<img src="https://github.com/proxin187/artx/raw/refs/heads/main/screenshots/screenshot.png">
+
 ## Installation
 
 This script is intended for use on a fresh Artix Linux runit base install.
